@@ -41,7 +41,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected void writeFile(Boolean answer) {
         Date todaysDate = new Date();
         String workoutToday = sdf.format(todaysDate);
-        workoutToday +="%"+Boolean.toString(answer)+"|";
+        workoutToday = workoutToday+"x"+Boolean.toString(answer)+"y";
         FileOutputStream outputStream;
         try {
             if(getBaseContext().getFileStreamPath(filename).exists()) {
@@ -76,16 +76,27 @@ public class CalendarActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String[] coloredArray = temp.split("|");
+        String[] coloredArray = temp.split("y");
         if (coloredArray != null){
             for(String s: coloredArray){
-                String[] coloredArray2 = s.split("%");
-                if(Boolean.getBoolean(coloredArray2[1]))
+                String[] coloredArray2 = s.split("x");
+                if(Boolean.getBoolean(coloredArray2[1])) {
+                    try {
+                        d = sdf.parse(coloredArray2[0]);
+                        coloredList.add(d);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        else{
+            String[] coloredArray2 = coloredArray[0].split("x");
+            if(Boolean.getBoolean(coloredArray2[1])) {
                 try {
                     d = sdf.parse(coloredArray2[0]);
                     coloredList.add(d);
-                }
-                catch(ParseException e){
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
